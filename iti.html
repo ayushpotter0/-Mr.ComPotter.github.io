@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI COPA - Computer Operator and Programming Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --iti-color: #9b59b6;
+            --correct-color: #4CAF50;
+            --wrong-color: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 0.5rem auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* ITI Main Card Styles */
+        .iti-main-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            max-width: 1000px;
+            border-top: 5px solid var(--iti-color);
+        }
+
+        .iti-main-card i {
+            font-size: 2.5rem;
+            color: var(--iti-color);
+            margin-bottom: 1rem;
+        }
+
+        .iti-main-card h3 {
+            color: var(--iti-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Lesson Cards Grid - Changed to vertical layout */
+        .lesson-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 100%;
+            margin: left;
+           
+        }
+
+        .lesson-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid var(--iti-color);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .lesson-card i {
+            font-size: 1.8rem;
+            color: var(--iti-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Lesson Content Section */
+        .lesson-content {
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Quiz Card */
+        .quiz-card {
+            background-color: #f7f0f8;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px dashed var(--iti-color);
+            cursor: pointer;
+        }
+
+        .quiz-card:hover {
+            background-color: #e8dff1;
+        }
+
+         /* नए क्विज़ स्टाइल्स */
+    .quiz-section {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin: 20px 0;
+    }
+    
+    .question {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .question h4 {
+        color: var(--dark-color);
+        margin-bottom: 15px;
+    }
+    
+    .options {
+        margin: 15px 0;
+    }
+    
+    .option {
+        display: block;
+        margin: 10px 0;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .option:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .option input[type="radio"] {
+        margin-right: 10px;
+    }
+    
+    .option.selected {
+        background-color: #e1f5fe;
+        border-color: var(--primary-color);
+    }
+    
+    .option.correct {
+        background-color: #e8f5e9;
+        border-color: var(--success-color);
+        color: #2e7d32;
+    }
+    
+    .option.incorrect {
+        background-color: #ffebee;
+        border-color: var(--accent-color);
+        color: #c62828;
+    }
+    
+    /* नया रिजल्ट कार्ड स्टाइल */
+    .quiz-result {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-top: 30px;
+        border-top: 5px solid var(--iti-color);
+    }
+    
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .result-title {
+        color: var(--dark-color);
+        margin: 0;
+    }
+    
+    .result-body {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 15px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .result-label {
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+    
+    .result-value {
+        font-weight: 600;
+    }
+    
+    .score-value {
+        color: var(--success-color);
+        font-size: 18px;
+    }
+    
+    .percentage-value {
+        color: var(--iti-color);
+        font-size: 18px;
+    }
+    
+    .progress-container {
+        width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        margin: 20px 0;
+        height: 10px;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        border-radius: 10px;
+        background-color: var(--success-color);
+        transition: width 0.5s ease;
+    }
+.feedback-container {
+    text-align: center;
+    margin: 25px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #9b59b6;
+}
+
+        .back-btn {
+            margin-bottom: 1rem;
+            background-color: var(--iti-color);
+        }
+
+        /* Correct/Wrong answer highlighting */
+        .correct-answer {
+            background-color: rgba(76, 175, 80, 0.2);
+            border-left: 3px solid var(--correct-color);
+        }
+
+        .wrong-answer {
+            background-color: rgba(244, 67, 54, 0.2);
+            border-left: 3px solid var(--wrong-color);
+        }
+
+        .selected-option {
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<h2 id="welcome">Loading...</h2>
+
+<!-- Back Button -->
+<div style="position: fixed; top: 27px; right: 20px; z-index: 9999;">
+    <button onclick="goBack()" style="
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        transition: all 0.3s ease;
+    " 
+    onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.7)';" 
+    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.6)';">
+        ⬅️ Home
+    </button>
+</div>
+<script>
+<div id="status" style="background:#eee; padding:10px; font-weight:bold;"></div>
+
+  fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('welcome').innerText = data.content.welcomeMessage;
+    })
+    .catch(() => {
+      document.getElementById('welcome').innerText = "डेटा लोड नहीं हो सका।";
+    });
+</script>
+
+
+<script>
+
+    function goBack() {
+        window.location.href = 'main.html'; // यहाँ अपनी main site का नाम डालो
+    }
+</script>
+    <header style="background: linear-gradient(135deg, var(--iti-color), #6c3483); color: white; padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000;">
+    <div class="container" style="text-align: center;">
+        
+        
+        <marquee behavior="scroll" direction="left" scrollamount="6" style="font-weight: bold; font-size: 1.2rem; color: #ffccff; margin-top: 5px;">
+            <h2>💻 Welcome to Mr.ComPotter - Learn, Code & Practice with Fun! 💡</h2>
+        </marquee>
+    </div>
+</header>
+
+
+    <main class="container">
+        <!-- ITI COPA Main Card -->
+        <section class="section">
+            <div class="iti-main-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>ITI COPA Course Modules</h2>
+                <h3>Select a lesson to view content and take quiz</h3>
+            </div>
+        </section>
+
+        <!-- Lessons Grid - Now vertical layout -->
+        <section class="section">
+            <div class="lesson-grid" id="lessonsGrid">
+                <!-- Lesson 1 -->
+                <div class="lesson-card" data-lesson="1">
+                    <i class="fas fa-desktop"></i>
+                    <h2>Computer Fundamentals</h2>
+                    <p>Basic computer organization and architecture</p>
+                    <div class="quiz-card" data-lesson="1">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+                
+                <!-- Lesson 2 -->
+                <div class="lesson-card" data-lesson="2">
+                    <i class="fas fa-window-restore"></i>
+                    <h4>Operating System</h4>
+                    <p>Windows OS and file management</p>
+                    <div class="quiz-card" data-lesson="2">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+                
+                <!-- Lesson 3 -->
+                <div class="lesson-card" data-lesson="3">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Office Automation</h4>
+                    <p>MS Office applications</p>
+                    <div class="quiz-card" data-lesson="3">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+                
+                <!-- Lesson 4 -->
+                <div class="lesson-card" data-lesson="4">
+                    <i class="fas fa-code"></i>
+                    <h4>Programming Concepts</h4>
+                    <p>C, HTML, CSS, JavaScript</p>
+                    <div class="quiz-card" data-lesson="4">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+                
+                <!-- Lesson 5 -->
+                <div class="lesson-card" data-lesson="5">
+                    <i class="fas fa-globe"></i>
+                    <h4>Internet & Web Design</h4>
+                    <p>Web browsing and basic design</p>
+                    <div class="quiz-card" data-lesson="5">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+                
+                <!-- Lesson 6 -->
+                <div class="lesson-card" data-lesson="6">
+                    <i class="fas fa-database"></i>
+                    <h4>Database Management</h4>
+                    <p>MS Access and SQL basics</p>
+                    <div class="quiz-card" data-lesson="6">
+                        <i class="fas fa-question-circle"></i> Take Quiz
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lesson Content Section -->
+        <section class="section">
+            <div id="lessonContent" class="lesson-content">
+                <button class="btn back-btn" id="backToLessons"><i class="fas fa-arrow-left"></i> Back to Lessons</button>
+                <h3 id="lessonTitle"></h3>
+                <div id="lessonMaterial"></div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="section">
+            <div id="quizSection" class="quiz-section">
+                <button class="btn back-btn" id="backFromQuiz"><i class="fas fa-arrow-left"></i> Back</button>
+                <h3 id="quizTitle"></h3>
+                <div id="quizQuestions"></div>
+                <button id="submitQuiz" class="btn" style="background-color: var(--iti-color); margin-top: 20px;">Submit Quiz</button>
+                <div id="quizResult" class="quiz-result"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Lesson Data
+        const lessonsData = {
+            1: {
+                title: "Computer Fundamentals",
+                content: `
+                    <h4>Computer Basics</h4>
+                    <ul>
+                        <li><strong>Definition:</strong> Electronic device for processing data</li>
+                        <li><strong>Components:</strong> CPU, Memory, Input/Output devices</li>
+                        <li><strong>Types:</strong> Analog, Digital, Hybrid</li>
+                        <li><strong>Generations:</strong> 1st to 5th generation computers</li>
+                    </ul>
+                    
+                    <h4>Input/Output Devices</h4>
+                    <ul>
+                        <li><strong>Input:</strong> Keyboard, Mouse, Scanner, MICR, OMR</li>
+                        <li><strong>Output:</strong> Monitor, Printer, Plotter, Speaker</li>
+                        <li><strong>Storage:</strong> HDD, SSD, Pen Drive, CD/DVD</li>
+                    </ul>
+                    
+                    <h4>Number Systems</h4>
+                    <ul>
+                        <li>Binary (Base-2)</li>
+                        <li>Octal (Base-8)</li>
+                        <li>Decimal (Base-10)</li>
+                        <li>Hexadecimal (Base-16)</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is NOT an input device?",
+                        options: ["Keyboard", "Mouse", "Printer", "Scanner"],
+                        answer: 2
+                    },
+                    {
+                        question: "What is the base of binary number system?",
+                        options: ["2", "8", "10", "16"],
+                        answer: 0
+                    },
+                    {
+                        question: "Which generation used integrated circuits?",
+                        options: ["1st", "2nd", "3rd", "4th"],
+                        answer: 2
+                    }
+                ]
+            },
+            2: {
+                title: "Operating System",
+                content: `
+                    <h4>Windows OS</h4>
+                    <ul>
+                        <li><strong>Features:</strong> GUI, Multitasking, File Management</li>
+                        <li><strong>Versions:</strong> Windows 7, 8, 10, 11</li>
+                        <li><strong>Components:</strong> Desktop, Taskbar, Start Menu</li>
+                    </ul>
+                    
+                    <h4>File Management</h4>
+                    <ul>
+                        <li>Creating files and folders</li>
+                        <li>Copy, Move, Delete operations</li>
+                        <li>File extensions and associations</li>
+                    </ul>
+                    
+                    <h4>System Utilities</h4>
+                    <ul>
+                        <li>Disk Cleanup</li>
+                        <li>Defragmentation</li>
+                        <li>Task Manager</li>
+                        <li>Control Panel</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is NOT a Windows version?",
+                        options: ["Windows 7", "Windows 10", "Windows XP", "Windows Linux"],
+                        answer: 3
+                    },
+                    {
+                        question: "What is the shortcut to open Task Manager?",
+                        options: ["Ctrl+Alt+Del", "Ctrl+Shift+Esc", "Alt+F4", "Both A and B"],
+                        answer: 3
+                    },
+                    {
+                        question: "Which utility reorganizes disk data?",
+                        options: ["Disk Cleanup", "Defragmenter", "Format", "Check Disk"],
+                        answer: 1
+                    }
+                ]
+            },
+            3: {
+                title: "Office Automation",
+                content: `
+                    <h4>MS Word</h4>
+                    <ul>
+                        <li>Document creation and formatting</li>
+                        <li>Tables, Images, and Charts</li>
+                        <li>Mail Merge feature</li>
+                    </ul>
+                    
+                    <h4>MS Excel</h4>
+                    <ul>
+                        <li>Spreadsheet basics</li>
+                        <li>Formulas and Functions</li>
+                        <li>Charts and Graphs</li>
+                    </ul>
+                    
+                    <h4>MS PowerPoint</h4>
+                    <ul>
+                        <li>Creating presentations</li>
+                        <li>Animations and Transitions</li>
+                        <li>Slide Master</li>
+                    </ul>
+                    
+                    <h4>MS Access</h4>
+                    <ul>
+                        <li>Database concepts</li>
+                        <li>Tables, Forms, Queries</li>
+                        <li>Reports</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is used for bulk letters?",
+                        options: ["Mail Merge", "Macros", "Templates", "Styles"],
+                        answer: 0
+                    },
+                    {
+                        question: "What does SUM function do in Excel?",
+                        options: ["Adds numbers", "Counts cells", "Finds average", "Multiplies numbers"],
+                        answer: 0
+                    },
+                    {
+                        question: "Which is NOT an MS Office application?",
+                        options: ["Word", "Excel", "PowerPoint", "Photoshop"],
+                        answer: 3
+                    }
+                ]
+            },
+            4: {
+                title: "Programming Concepts",
+                content: `
+                    <h4>C Programming</h4>
+                    <ul>
+                        <li>Data types and variables</li>
+                        <li>Control structures</li>
+                        <li>Functions and arrays</li>
+                    </ul>
+                    
+                    <h4>Web Technologies</h4>
+                    <ul>
+                        <li>HTML - Structure of web pages</li>
+                        <li>CSS - Styling web pages</li>
+                        <li>JavaScript - Client-side scripting</li>
+                    </ul>
+                    
+                    <h4>Python Basics</h4>
+                    <ul>
+                        <li>Variables and data types</li>
+                        <li>Conditional statements</li>
+                        <li>Loops</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is NOT a C data type?",
+                        options: ["int", "float", "string", "double"],
+                        answer: 2
+                    },
+                    {
+                        question: "What does CSS stand for?",
+                        options: ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style System", "Colorful Style Sheets"],
+                        answer: 0
+                    },
+                    {
+                        question: "Which symbol starts Python comments?",
+                        options: ["//", "#", "/*", "<!--"],
+                        answer: 1
+                    }
+                ]
+            },
+            5: {
+                title: "Internet & Web Design",
+                content: `
+                    <h4>Internet Basics</h4>
+                    <ul>
+                        <li>What is Internet?</li>
+                        <li>Web browsers and search engines</li>
+                        <li>Email and communication</li>
+                    </ul>
+                    
+                    <h4>Web Design</h4>
+                    <ul>
+                        <li>HTML5 structure</li>
+                        <li>CSS3 styling</li>
+                        <li>Responsive design</li>
+                    </ul>
+                    
+                    <h4>Internet Security</h4>
+                    <ul>
+                        <li>Viruses and malware</li>
+                        <li>Firewalls</li>
+                        <li>Secure browsing</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is NOT a web browser?",
+                        options: ["Chrome", "Firefox", "Edge", "Photoshop"],
+                        answer: 3
+                    },
+                    {
+                        question: "Which HTML tag creates a paragraph?",
+                        options: ["<p>", "<para>", "<paragraph>", "<pg>"],
+                        answer: 0
+                    },
+                    {
+                        question: "What protects against viruses?",
+                        options: ["Antivirus", "Firewall", "Both", "Neither"],
+                        answer: 2
+                    }
+                ]
+            },
+            6: {
+                title: "Database Management",
+                content: `
+                    <h4>Database Concepts</h4>
+                    <ul>
+                        <li>What is a database?</li>
+                        <li>Tables, Records, Fields</li>
+                        <li>Primary and Foreign keys</li>
+                    </ul>
+                    
+                    <h4>MS Access</h4>
+                    <ul>
+                        <li>Creating tables</li>
+                        <li>Forms and queries</li>
+                        <li>Reports</li>
+                    </ul>
+                    
+                    <h4>SQL Basics</h4>
+                    <ul>
+                        <li>SELECT statements</li>
+                        <li>INSERT, UPDATE, DELETE</li>
+                        <li>Simple queries</li>
+                    </ul>
+                `,
+                quiz: [
+                    {
+                        question: "Which is NOT a database object?",
+                        options: ["Table", "Query", "Form", "Slide"],
+                        answer: 3
+                    },
+                    {
+                        question: "Which SQL command retrieves data?",
+                        options: ["GET", "SELECT", "RETRIEVE", "FIND"],
+                        answer: 1
+                    },
+                    {
+                        question: "What uniquely identifies a record?",
+                        options: ["Primary Key", "Foreign Key", "Both", "Neither"],
+                        answer: 0
+                    }
+                ]
+            }
+        };
+
+        // DOM Elements
+        const lessonsGrid = document.getElementById('lessonsGrid');
+        const lessonContent = document.getElementById('lessonContent');
+        const lessonTitle = document.getElementById('lessonTitle');
+        const lessonMaterial = document.getElementById('lessonMaterial');
+        const backToLessons = document.getElementById('backToLessons');
+        
+        const quizSection = document.getElementById('quizSection');
+        const quizTitle = document.getElementById('quizTitle');
+        const quizQuestions = document.getElementById('quizQuestions');
+        const backFromQuiz = document.getElementById('backFromQuiz');
+        const submitQuiz = document.getElementById('submitQuiz');
+        const quizResult = document.getElementById('quizResult');
+
+        // Variables
+        let currentLesson = null;
+        let currentQuiz = null;
+
+        // Event Listeners
+        // Lesson cards click
+        document.querySelectorAll('.lesson-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const lessonId = this.getAttribute('data-lesson');
+                showLesson(lessonId);
+            });
+        });
+
+        // Quiz cards click
+        document.querySelectorAll('.quiz-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent lesson card click
+                const lessonId = this.getAttribute('data-lesson');
+                showQuiz(lessonId);
+            });
+        });
+
+        backToLessons.addEventListener('click', () => {
+            lessonContent.style.display = 'none';
+            lessonsGrid.style.display = 'flex';
+        });
+
+        backFromQuiz.addEventListener('click', () => {
+            quizSection.style.display = 'none';
+            if (currentQuiz) {
+                showLesson(currentQuiz);
+            } else {
+                lessonsGrid.style.display = 'flex';
+            }
+        });
+
+        submitQuiz.addEventListener('click', showQuizResults);
+
+        // Functions
+        function showLesson(lessonId) {
+            currentLesson = lessonId;
+            currentQuiz = null;
+            
+            const lesson = lessonsData[lessonId];
+            lessonTitle.textContent = lesson.title;
+            lessonMaterial.innerHTML = lesson.content;
+            
+            lessonsGrid.style.display = 'none';
+            quizSection.style.display = 'none';
+            lessonContent.style.display = 'block';
+            
+            window.scrollTo({
+                top: lessonContent.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+
+function showQuiz(lessonId) {
+    currentQuiz = lessonId;
+    
+    const lesson = lessonsData[lessonId];
+    quizTitle.textContent = `${lesson.title} - Quiz`;
+    
+    // Build quiz questions
+    quizQuestions.innerHTML = '';
+    lesson.quiz.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.innerHTML = `
+            <h4>${index + 1}. ${question.question}</h4>
+            <div class="options">
+                ${question.options.map((option, optIndex) => `
+                    <label class="option" id="option-${index}-${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}" style="display: none;">
+                        ${option}
+                    </label>
+                `).join('')}
+            </div>
+        `;
+        quizQuestions.appendChild(questionDiv);
+    });
+    
+    // Add event listeners for options
+    document.querySelectorAll('.option').forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Remove selected class from all options in this question
+            const questionDiv = this.closest('.question');
+            questionDiv.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+        });
+    });
+    
+    lessonsGrid.style.display = 'none';
+    lessonContent.style.display = 'none';
+    quizSection.style.display = 'block';
+    quizResult.style.display = 'none';
+    
+    window.scrollTo({
+        top: quizSection.offsetTop,
+        behavior: 'smooth'
+    });
+    }
+
+  function showQuizResults() {
+    const lesson = lessonsData[currentQuiz];
+    let score = 0;
+    const totalQuestions = lesson.quiz.length;
+    
+    // Check answers
+    lesson.quiz.forEach((question, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const selectedValue = selectedOption ? parseInt(selectedOption.value) : null;
+        
+        question.options.forEach((option, optIndex) => {
+            const optionElement = document.getElementById(`option-${index}-${optIndex}`);
+            optionElement.classList.remove('correct', 'incorrect');
+            
+            if (optIndex === question.answer) {
+                optionElement.classList.add('correct');
+            } else if (selectedValue === optIndex) {
+                optionElement.classList.add('incorrect');
+            }
+            
+            if (selectedValue === question.answer && optIndex === question.answer) {
+                score++;
+            }
+        });
+    });
+    
+    // Calculate percentage
+    const percentage = (score / totalQuestions) * 100;
+    
+    // Get feedback based on performance
+    const feedback = getFeedback(percentage);
+    
+    // Display results matching your reference image
+    quizResult.innerHTML = `
+        <div class="result-header">
+            <h2 class="result-title">Quiz Results</h2>
+            <div class="quiz-name">${lesson.title}</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" style="width: ${percentage}%"></div>
+        </div>
+        
+        <div class="result-body">
+            <div class="result-item">
+                <span class="result-label">Your Score:</span>
+                <span class="result-value score-value">${score}/${totalQuestions}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Correct Answers:</span>
+                <span class="result-value">${score}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Percentage:</span>
+                <span class="result-value percentage-value">${percentage.toFixed(2)}%</span>
+            </div>
+        </div>
+        
+        <div class="feedback-container" style="border-left-color: ${feedback.color}">
+            <i class="${feedback.icon}" style="font-size: 28px; color: ${feedback.color}; margin-bottom: 10px;"></i>
+            <p style="margin: 10px 0; font-weight: 500; color: ${feedback.color};">${feedback.message}</p>
+            <p style="font-style: italic; color: #666;">${feedback.note}</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 15px;">
+                       <button onclick="showLesson(currentQuiz)" class="btn" style="background-color: var(--primary-color);">
+                <i class="fas fa-book"></i> Review Lesson
+            </button>
+        </div>
+    `;
+    
+    quizResult.style.display = 'block';
+    quizResult.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Updated feedback system in English
+function getFeedback(percentage) {
+    if (percentage >= 80) {
+        return {
+            message: "Excellent Performance!",
+            note: "You have mastered this topic!",
+            icon: "fas fa-trophy",
+            color: "var(--success-color)"
+        };
+    } else if (percentage >= 50) {
+        return {
+            message: "Good Job!",
+            note: "With a little more practice, you can do even better!",
+            icon: "fas fa-thumbs-up",
+            color: "var(--primary-color)"
+        };
+    } else {
+        return {
+            message: "Keep Practicing!",
+            note: "Review the lesson and try again to improve your score.",
+            icon: "fas fa-redo",
+            color: "var(--accent-color)"
+        };
+    }
+}
+    </script>
+</body>
+</html>
